@@ -2,6 +2,7 @@
 
 #if canImport(UIKit) && !os(watchOS)
 import UIKit
+import Foundation
 
 // MARK: - Methods
 
