@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension Text {
+public extension Text {
     /// SwifterSwift: Auto scale down by use minimumScaleFactor.
     func autoSize(minimumScaleFactor: CGFloat = 0.01, lineLimit: Int = 1) -> some View {
         self.lineLimit(lineLimit)

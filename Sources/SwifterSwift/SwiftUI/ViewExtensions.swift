@@ -9,7 +9,7 @@
 #if os(iOS)
 import SwiftUI
 
-struct FontWithLineHeight: ViewModifier {
+private struct FontWithLineHeight: ViewModifier {
     let font: UIFont
     let lineHeight: CGFloat
 
@@ -32,7 +32,7 @@ private struct RoundedCorner: Shape {
     }
 }
 
-extension View {
+public extension View {
     
     /// Sets the text color for a navigation bar title.
     /// - Parameter color: Color the title should be
@@ -156,7 +156,7 @@ extension View {
 }
 
 #if canImport(UIKit)
-extension View {
+public extension View {
     func hideKeyboard() {
         DispatchQueue.main.async {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -181,7 +181,7 @@ struct DeviceRotationViewModifier: ViewModifier {
 }
 
 // A View wrapper to make the modifier easier to use
-extension View {
+public extension View {
     
     ///Example
     // An example view to demonstrate the solution
@@ -213,7 +213,7 @@ extension View {
 
 }
 
-extension View {
+public extension View {
     func isRunInPreview() -> Bool {
         return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
     }
@@ -229,7 +229,7 @@ struct HiddenNavigationBar: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func hiddenNavigationBarStyle() -> some View {
         modifier( HiddenNavigationBar() )
     }
@@ -254,7 +254,7 @@ struct TabBarHeighOffsetViewModifier: ViewModifier {
             }
         }
 }
-extension View {
+public extension View {
     func tabBarHeightOffset(perform action: @escaping (CGFloat) -> Void) -> some View {
         modifier(TabBarHeighOffsetViewModifier(action: action))
     }

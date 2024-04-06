@@ -21,7 +21,7 @@ extension UIColorWell {
     }
 }
 
-class UIColorWellHelper: NSObject {
+public class UIColorWellHelper: NSObject {
     static let helper = UIColorWellHelper()
     var execute: (() -> ())?
     @objc func handler(_ sender: Any) {
