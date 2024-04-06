@@ -5,7 +5,7 @@
 //  Created by SwifterSwift on 06/04/2024.
 //  Copyright © 2024 SwifterSwift
 //
-
+#if os(iOS)
 import SwiftUI
 
 extension UIColorWell {
@@ -28,3 +28,5 @@ class UIColorWellHelper: NSObject {
         execute?()
     }
 }
+
+#endif

@@ -5,7 +5,7 @@
 //  Created by SwifterSwift on 06/04/2024.
 //  Copyright © 2024 SwifterSwift
 //
-
+#if canImport(UIKit) && os(iOS)
 import UIKit
 
 extension UIDevice {
@@ -193,3 +193,4 @@ extension UIDevice {
     }
     
 }
+#endif

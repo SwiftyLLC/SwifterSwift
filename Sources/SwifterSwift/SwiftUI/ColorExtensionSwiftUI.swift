@@ -5,7 +5,7 @@
 //  Created by SwifterSwift on 06/04/2024.
 //  Copyright © 2024 SwifterSwift
 //
-
+#if os(iOS)
 import SwiftUI
 
 extension Color {
@@ -53,3 +53,5 @@ extension Color {
     }
 
 }
+
+#endif

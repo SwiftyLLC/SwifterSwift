@@ -30,12 +30,14 @@ public extension URL {
         URLComponents(url: self, resolvingAgainstBaseURL: false)?.queryItems
     }
     
+    #if os(iOS)
     var urlAsset: AVURLAsset {
         let opts = [
             AVURLAssetPreferPreciseDurationAndTimingKey: NSNumber(value:true)
         ]
         return AVURLAsset(url: self, options: opts)
     }
+    #endif
 }
 
 // MARK: - Initializers

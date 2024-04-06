@@ -83,7 +83,7 @@ public extension UINavigationBar {
         #endif
         tintColor = text
     }
-    
+    #if os(iOS)
     static func changeAppearance(clear: Bool) {
         let appearance = UINavigationBarAppearance()
         
@@ -99,6 +99,7 @@ public extension UINavigationBar {
         UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
+    #endif
 }
 
 #endif

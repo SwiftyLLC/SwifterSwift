@@ -6,6 +6,7 @@
 //  Copyright © 2024 SwifterSwift
 //
 
+#if os(iOS)
 import SwiftUI
 
 struct FontWithLineHeight: ViewModifier {
@@ -359,4 +360,6 @@ public extension VisualEffectBlur where Content == EmptyView {
         }
     }
 }
+#endif
+
 #endif
