@@ -1,5 +1,7 @@
 // ArrayExtensions.swift - Copyright 2024 SwifterSwift
 
+import Foundation
+
 // MARK: - Initializers
 
 public extension Array {
