@@ -295,21 +295,21 @@ public struct VisualEffectBlur<Content: View>: View {
 
 // MARK: - Representable
 
-extension VisualEffectBlur {
+public extension VisualEffectBlur {
     struct Representable<Content: View>: UIViewRepresentable {
         var blurStyle: UIBlurEffect.Style
         var vibrancyStyle: UIVibrancyEffectStyle?
         var content: Content
 
-        func makeUIView(context: Context) -> UIVisualEffectView {
+        public func makeUIView(context: Context) -> UIVisualEffectView {
             context.coordinator.blurView
         }
 
-        func updateUIView(_ view: UIVisualEffectView, context: Context) {
+        public func updateUIView(_ view: UIVisualEffectView, context: Context) {
             context.coordinator.update(content: content, blurStyle: blurStyle, vibrancyStyle: vibrancyStyle)
         }
 
-        func makeCoordinator() -> Coordinator {
+        public func makeCoordinator() -> Coordinator {
             Coordinator(content: content)
         }
     }
@@ -317,7 +317,7 @@ extension VisualEffectBlur {
 
 // MARK: - Coordinator
 
-extension VisualEffectBlur.Representable {
+public extension VisualEffectBlur.Representable {
     class Coordinator {
         let blurView = UIVisualEffectView()
         let vibrancyView = UIVisualEffectView()

@@ -103,6 +103,18 @@ public extension UIApplication {
 
         return root
     }
+    
+    var topMostViewController: UIViewController? {
+        guard let currentScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+              debugPrint("UNABLE TO GET CURRENT SCENE")
+              return nil
+        }
+        var topMostViewController: UIViewController? = currentScene.windows.first?.rootViewController
+        while topMostViewController?.presentedViewController != nil {
+            topMostViewController = topMostViewController?.presentedViewController
+        }
+        return topMostViewController
+    }
 
     /// SwifterSwift: Hide keyboard
     func dismissKeyboard() {
