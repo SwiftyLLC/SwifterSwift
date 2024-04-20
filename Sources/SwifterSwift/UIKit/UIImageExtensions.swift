@@ -374,19 +374,19 @@ public extension UIImage {
     }
     
     /// SwifterSwift: UIImage fixe Orientation.
-    func fixedOrientation(for image: UIImage) -> UIImage? {
+    func fixedOrientation() -> UIImage? {
         
-        guard image.imageOrientation != .up else {
-            return image
+        guard self.imageOrientation != .up else {
+            return self
         }
         
-        let size = image.size
+        let size = self.size
         
-        let imageOrientation = image.imageOrientation
+        let imageOrientation = self.imageOrientation
         
         var transform: CGAffineTransform = .identity
 
-        switch image.imageOrientation {
+        switch self.imageOrientation {
         case .down, .downMirrored:
             transform = transform.translatedBy(x: size.width, y: size.height)
             transform = transform.rotated(by: CGFloat.pi)
@@ -416,14 +416,14 @@ public extension UIImage {
             break
         }
         
-        guard var cgImage = image.cgImage else {
+        guard var cgImage = self.cgImage else {
             return nil
         }
         
         autoreleasepool {
             var context: CGContext?
             
-            guard let colorSpace = cgImage.colorSpace, let _context = CGContext(data: nil, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+            guard let colorSpace = cgImage.colorSpace, let _context = CGContext(data: nil, width: Int(self.size.width), height: Int(self.size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
                 return
             }
             context = _context
