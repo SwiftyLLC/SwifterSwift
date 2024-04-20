@@ -372,6 +372,156 @@ public extension UIImage {
     func withAlwaysOriginalTintColor(_ color: UIColor) -> UIImage {
         return withTintColor(color, renderingMode: .alwaysOriginal)
     }
+    
+    /// SwifterSwift: UIImage fixe Orientation.
+    func fixedOrientation(for image: UIImage) -> UIImage? {
+        
+        guard image.imageOrientation != .up else {
+            return image
+        }
+        
+        let size = image.size
+        
+        let imageOrientation = image.imageOrientation
+        
+        var transform: CGAffineTransform = .identity
+
+        switch image.imageOrientation {
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: size.width, y: size.height)
+            transform = transform.rotated(by: CGFloat.pi)
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: size.width, y: 0)
+            transform = transform.rotated(by: CGFloat.pi / 2.0)
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: size.height)
+            transform = transform.rotated(by: CGFloat.pi / -2.0)
+        case .up, .upMirrored:
+            break
+        @unknown default:
+            break
+        }
+
+        // Flip image one more time if needed to, this is to prevent flipped image
+        switch imageOrientation {
+        case .upMirrored, .downMirrored:
+            transform = transform.translatedBy(x: size.width, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        case .leftMirrored, .rightMirrored:
+            transform = transform.translatedBy(x: size.height, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        case .up, .down, .left, .right:
+            break
+        @unknown default:
+            break
+        }
+        
+        guard var cgImage = image.cgImage else {
+            return nil
+        }
+        
+        autoreleasepool {
+            var context: CGContext?
+            
+            guard let colorSpace = cgImage.colorSpace, let _context = CGContext(data: nil, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+                return
+            }
+            context = _context
+            
+            context?.concatenate(transform)
+
+            var drawRect: CGRect = .zero
+            switch imageOrientation {
+            case .left, .leftMirrored, .right, .rightMirrored:
+                drawRect.size = CGSize(width: size.height, height: size.width)
+            default:
+                drawRect.size = CGSize(width: size.width, height: size.height)
+            }
+
+            context?.draw(cgImage, in: drawRect)
+            
+            guard let newCGImage = context?.makeImage() else {
+                return
+            }
+            cgImage = newCGImage
+        }
+        
+        let uiImage = UIImage(cgImage: cgImage, scale: 1, orientation: .up)
+        return uiImage
+    }
+    
+    func flipHorizontally() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+        let context = UIGraphicsGetCurrentContext()!
+        
+        context.translateBy(x: self.size.width/2, y: self.size.height/2)
+        context.scaleBy(x: -1.0, y: 1.0)
+        context.translateBy(x: -self.size.width/2, y: -self.size.height/2)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+    
+    func flipVerticaly() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+        let context = UIGraphicsGetCurrentContext()!
+        
+        context.translateBy(x: self.size.width/2, y: self.size.height/2)
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.translateBy(x: -self.size.width/2, y: -self.size.height/2)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+    
+    func rotate(radians: CGFloat) -> UIImage {
+        var newSize = CGRect(origin: CGPoint.zero, size: self.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians))).size
+        
+        newSize.width = floor(newSize.width)
+        newSize.height = floor(newSize.height)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale)
+        
+        let context = UIGraphicsGetCurrentContext()!
+        context.translateBy(x: newSize.width/2, y: newSize.height/2)
+        context.rotate(by: CGFloat(radians))
+        
+        self.draw(in: CGRect(x: -self.size.width/2, y: -self.size.height/2, width: self.size.width, height: self.size.height))
+        
+        guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+    
+    // giam kich thuoc anh theo %
+    // let compressData = UIImageJPEGRepresentation(myImage, 0.5) -> cach giam tiep kich thuoc
+    // let compressedImage = UIImage(data: compressData)
+    func resized(withPercentage percentage: CGFloat, isOpaque: Bool = true) -> UIImage? {
+        let canvas = CGSize(width: size.width * percentage, height: size.height * percentage)
+        let format = imageRendererFormat
+        format.opaque = isOpaque
+        return UIGraphicsImageRenderer(size: canvas, format: format).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
+    }
+    
+    // giam kich thuoc anh theo width
+    func resized(toWidth width: CGFloat, isOpaque: Bool = true) -> UIImage? {
+        let canvas = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
+        let format = imageRendererFormat
+        format.opaque = isOpaque
+        return UIGraphicsImageRenderer(size: canvas, format: format).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
+    }
+
 }
 
 // MARK: - Initializers
