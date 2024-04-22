@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Image {
+public extension Image {
     init(cgImage: CGImage) {
         #if os(iOS)
         self.init(uiImage: UIImage(cgImage: cgImage))
